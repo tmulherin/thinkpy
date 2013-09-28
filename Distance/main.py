@@ -28,7 +28,7 @@ rate = 0.0
 time = 0.0
 
 def cls():
-    os.system("clear")
+    os.system("cls")
 #    print("\x1B[2J")
 
 def dummyProc(something):
@@ -81,39 +81,48 @@ def GetSolutionType():
 def GetTime():
 
     got_time = 0
-    thisTime = 0.0
+    thisTime = 0
     while not got_time:
         hours = input(prompt_info + prompt_hours)
-        if util_isNumber(hours):
-            got_time = 1
-            thisTime = int(hours)*60*60
+        if len(hours) == 0:
+            got_time = 1 
         else:
-            print(hours + " is not a valid number of hours.  Press any key to continue.")
-            hours = input()
+            if util_isNumber(hours):
+                got_time = 1
+                thisTime = int(hours)*60*60
+            else:
+                print(hours + " is not a valid number of hours.  Press any key to continue.")
+                hours = input()
 
     got_time = 0
     while not got_time:
         minutes = input(prompt_info + prompt_minutes)
-        if util_isNumber(minutes):
+        if len(minutes) == 0:
             got_time = 1
-            thisTime += int(minutes)*60
         else:
-            print(minutes + " is not a valid number of minutes.  Press any key to continue.")
-            minutes = input()
+            if util_isNumber(minutes):
+                got_time = 1
+                thisTime += int(minutes)*60
+            else:
+                print(minutes + " is not a valid number of minutes.  Press any key to continue.")
+                minutes = input()
 
     got_time = 0
     while not got_time:
         seconds = input(prompt_info + prompt_seconds)
-        if util_isNumber(seconds):
+        if len(seconds) == 0:
             got_time = 1
-            thisTime += int(seconds)
         else:
-            print(seconds + " is not a valid number of minutes.  Press any key to continue.")
-            seconds = input()
-    
-    thisTime = float(thisTime)/60/60
-    
-    return thisTime
+            if util_isNumber(seconds):
+                got_time = 1
+                thisTime += int(seconds)
+            else:
+                print(seconds + " is not a valid number of minutes.  Press any key to continue.")
+                seconds = input()
+
+#thisTime = float(thisTime)/60/60
+             
+    return thisTime # = Total seconds
 
 def util_inStr(string, substring):
     "Reminder: the caller must check for a return value of -1 (not found)"
@@ -260,7 +269,7 @@ def util_formatNumber(value, number_of_decimal_places = 0, commas_desired = 0):
 
     return number    
     
-def PopScreen(title, output_list = []):
+def PopScreen(title, output_line = []):
     cls()
     print()
     print(line_dashed)
@@ -285,11 +294,11 @@ def PopScreen(title, output_list = []):
         disp += " "*14
         print("  :" + disp + ":")
 
-    #==> Populate the matrix with the info we"re working on:
-    if len(output_list) > 0:
-        disp = (pad + str(output_list[0]))[len(output_list[0]) - 1:]
-        disp += (pad + str(output_list[1]))[len(str(output_list[1])) - 1:]
-        disp += (pad + str(output_list[2]))[len(str(output_list[2])) - 1:]
+    #==> Populate the matrix with the info we're working on:
+    if len(output_line) > 0:
+        disp = (pad + str(output_line[0]))[len(output_line[0]) - 1:]
+        disp += (pad + str(output_line[1]))[len(str(output_line[1])) - 1:]
+        disp += (pad + str(output_line[2]))[len(str(output_line[2])) - 1:]
         disp += " " * 14
         print("  :" + disp + ":")
 
@@ -300,20 +309,24 @@ def PopScreen(title, output_list = []):
     print()
 
 def SolutionForDistance():
-
+    '''
+        output_line[0] = distance
+        output_line[1] = rate
+        output_line[2] = time
+    '''
     PopScreen(title_distance)
 
-    output_list = ["?", "?", "?"]
+    output_line = ["?", "?", "?"] #--> Distance = Rate * Time
     rate = GetRate()
-    output_list[1] = util_formatNumber(rate, 2, 1)
+    output_line[1] = util_formatNumber(rate, 2, 1)
 
-    PopScreen(title_distance, output_list)
+    PopScreen(title_distance, output_line)
 
     #Get_Time()
     #Calculate distance
     time = GetTime()
-    output_list[2] = util_formatNumber(time, 2, 1)
-    PopScreen(title_distance, output_list)
+    output_line[2] = util_formatNumber(float(time)/60/60, 2, 1)
+    PopScreen(title_distance, output_line)
     input(prompt_info)
 
 def SolutionForRate():
