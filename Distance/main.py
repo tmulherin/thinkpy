@@ -1,4 +1,4 @@
-#!/usr/lib/python3.3
+#!c:\python\python
 
 import os
 #from decimal import Decimal
@@ -13,8 +13,8 @@ prompt_rate = "At what speed was the activity pursued? "
 prompt_hours = "For how many hours was the activity pursued? "
 prompt_minutes = "For how many minutes was the activity pursued? "
 prompt_seconds = "For how many seconds was the activity pursued? "
-prompt_info = ">>> "
-
+prompt_info = "--> "
+prompt_cont = "/nPress [Enter] to contimue"
 result_set = []
 
 title_distance = "  :" + " " * 29 + "<<< Distance >>>" + " " * 29 + ":"
@@ -53,11 +53,12 @@ def GetSolutionType():
     tries = 0
     prompt = "Are you looking for [d]istance, [r]ate or [t]ime? \n  > "
 
-    err_msg = " is not a valid 'distance = rate * time' problem.  Please press any key to continue."
+    err_msg = " is not a valid 'distance = rate * time' problem.  "
+
 
     fail_msg = "\n\n\n" + " "*30 + "Three strikes you're out!"
 
-    while tries < 3:
+    while tries < 4:
         tries += 1
         cls()
         for i in range(30): print()
@@ -71,7 +72,8 @@ def GetSolutionType():
             elif sol_type.lower() in("d", "r", "t"):
                 return sol_type.lower()
             else:
-                sol_type = input("\n"" + sol_type + """ +  err_msg)
+                sol_type = "\n" + sol_type + " " + err_msg
+                
         else:
             return 0 #empty input = quit
 
@@ -346,21 +348,6 @@ def SolveProblem(sol_type):
     else:
         cls()
         quit()
-
-def util_InStr(string, substring):
-    "Reminder: the caller must check for a return value of -1 (not found)"
-    loc = -1 #--> Because Python start counting at zero, search_string
-#                 could be at the zeroth position.  Bah!
-
-    string = str(string) #--> In case it ain't a string!
-    substring = str(substring) #--> Ditto
-
-    for char in string:
-        loc += 1 # Starts us off at position zero
-        if char == substring[0] and substring == string[loc:loc + len(substring)]:
-            return loc
- 
-    return -1 # substring not in string
 
 def util_IsInt(value):
     if util_isNumber(value):
